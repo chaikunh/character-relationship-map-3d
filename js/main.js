@@ -36,8 +36,8 @@ function animate() {
   camera.position.z = cam.pan.z + cam.dist * Math.cos(cam.rot.y) * Math.cos(cam.rot.x);
   camera.lookAt(cam.pan);
 
-  // 引く（cam.dist が大きい）ほど霧を弱め、遠景が暗くなりすぎないようにする
-  scene.fog.density = Math.min(0.0016, 0.55 / cam.dist);
+  // 引く（cam.dist が大きい）ほど霧を弱め、約700以遠では霧をオフにして遠景を明るく保つ
+  scene.fog.density = 0.0016 * Math.max(0, Math.min(1, (700 - cam.dist) / 450));
 
   const sel = selection.index;
 
