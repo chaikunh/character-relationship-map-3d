@@ -414,4 +414,13 @@ canvas { display: block; }
   /* 下パネル時はキャラを2列に並べて見やすく */
   #cl-items { display: flex; flex-wrap: wrap; align-content: flex-start; }
   .cl-item { width: 50%; box-sizing: border-box; }
+
+  /* ピン選択時の詳細パネル：画面下に全幅で表示（はみ出し防止） */
+  #info {
+    left: 8px; right: 8px; bottom: 8px;
+    width: auto; max-width: none;
+    max-height: 48vh; overflow-y: auto;
+    z-index: 16;
+  }
+  #info .info-img { max-height: 110px; }
 }
