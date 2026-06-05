@@ -38,6 +38,25 @@ canvas { display: block; }
 }
 
 /* 凡例 */
+/* 左カラム：検索→FACTION→ボタンを縦に集約（FACTION展開時はボタンが自然に下がる） */
+#controls {
+  position: fixed;
+  top: 92px; left: 28px;
+  z-index: 12;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 12px;
+  width: 232px;
+  max-height: calc(100vh - 110px);
+}
+#controls > #search,
+#controls > #legend,
+#controls > #bgm-toggle,
+#controls > #fs-toggle {
+  position: static; top: auto; left: auto; right: auto; bottom: auto; margin: 0;
+}
+#controls > #search { width: 100%; box-sizing: border-box; }
+#controls > #legend { width: 100%; }
+
 #legend {
   position: fixed;
   top: 14px; right: 258px;
@@ -376,9 +395,8 @@ canvas { display: block; }
   /* タイトルと検索・ボタンをコンパクトに */
   #title h1 { font-size: 18px; letter-spacing: 3px; }
   #title p { font-size: 9px; letter-spacing: 2px; }
-  #search { top: 64px; width: 46vw; max-width: 210px; }
-  #bgm-toggle { top: 104px; }
-  #fs-toggle { top: 142px; }
+  /* 左カラムはコンパクトに（検索→FACTION→ボタンが縦に並ぶ） */
+  #controls { top: 78px; left: 8px; width: 70vw; max-width: 300px; gap: 8px; }
 
   /* 一覧トグルボタン（右上） */
   #list-toggle {

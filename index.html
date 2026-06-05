@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>STAR WARS — 人物相関 3D</title>
-<link rel="stylesheet" href="css/style.css?v=34">
+<link rel="stylesheet" href="css/style.css?v=35">
 <script>
   // 起動エラーを画面に表示（LOADING のまま固まる原因を可視化）
   window.addEventListener('error', function (e) {
@@ -29,14 +29,8 @@
   <p>CHARACTER RELATIONSHIP MAP — 3D</p>
 </div>
 
+<div id="controls">
 <input id="search" type="text" placeholder="人物を検索…" autocomplete="off">
-
-<button id="bgm-toggle" title="テーマ曲を再生／停止">♪ BGM ON</button>
-<button id="img-url-btn" title="選択中のキャラに画像URLを設定">🖼 画像URL</button>
-<button id="img-export-btn" title="設定した画像URLを data.js 用に書き出す">📋 URL書出</button>
-<button id="img-clear-btn" title="保存した球体画像をすべて消去（要再読み込み）">🗑 画像消去</button>
-<audio id="bgm" loop preload="none" src="theme.mp3"></audio>
-<button id="fs-toggle" title="全画面表示の切り替え">⛶ 全画面</button>
 
 <div id="legend">
   <button class="lg-title" id="legend-toggle" aria-expanded="true">
@@ -63,6 +57,15 @@
     <div id="legend-films"><!-- 作品チェックは ui.js が動的生成 --></div>
   </div>
 </div>
+
+<button id="bgm-toggle" title="テーマ曲を再生／停止">♪ BGM ON</button>
+<button id="fs-toggle" title="全画面表示の切り替え">⛶ 全画面</button>
+</div><!-- /#controls -->
+
+<button id="img-url-btn" title="選択中のキャラに画像URLを設定">🖼 画像URL</button>
+<button id="img-export-btn" title="設定した画像URLを data.js 用に書き出す">📋 URL書出</button>
+<button id="img-clear-btn" title="保存した球体画像をすべて消去（要再読み込み）">🗑 画像消去</button>
+<audio id="bgm" loop preload="none" src="theme.mp3"></audio>
 
 <button id="list-toggle" title="キャラクター一覧の開閉">☰ 一覧</button>
 
