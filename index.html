@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAR WARS — 人物相関 3D</title>
+<link rel="stylesheet" href="css/style.css?v=24">
+</head>
+<body>
+<div id="loading">LOADING…</div>
+<div id="canvas-container"></div>
+
+<div id="title">
+  <h1>STAR WARS</h1>
+  <p>CHARACTER RELATIONSHIP MAP — 3D</p>
+</div>
+
+<input id="search" type="text" placeholder="人物を検索…" autocomplete="off">
+
+<button id="bgm-toggle" title="テーマ曲を再生／停止">♪ BGM ON</button>
+<button id="img-url-btn" title="選択中のキャラに画像URLを設定">🖼 画像URL</button>
+<button id="img-export-btn" title="設定した画像URLを data.js 用に書き出す">📋 URL書出</button>
+<button id="img-clear-btn" title="保存した球体画像をすべて消去（要再読み込み）">🗑 画像消去</button>
+<audio id="bgm" loop preload="none" src="theme.wav"></audio>
+<button id="fs-toggle" title="全画面表示の切り替え">⛶ 全画面</button>
+
+<div id="legend">
+  <button class="lg-title" id="legend-toggle" aria-expanded="true">
+    <span>FACTION</span><span class="lg-caret">▼</span>
+  </button>
+  <div class="lg-body" id="legend-body">
+    <div class="lg-subtitle"><span>表示レベル</span><span id="level-val">全部</span></div>
+    <input type="range" id="level-slider" class="lg-slider" min="1" max="5" value="5" step="1">
+    <div class="lg-divider"></div>
+    <label class="lg-row"><input type="checkbox" data-faction="jedi" checked><span class="lg-dot" style="color:#4FA8FF;background:#4FA8FF"></span>ジェダイ / 共和国</label>
+    <label class="lg-row"><input type="checkbox" data-faction="sith" checked><span class="lg-dot" style="color:#FF4F4F;background:#FF4F4F"></span>シス / 帝国</label>
+    <label class="lg-row"><input type="checkbox" data-faction="rebel" checked><span class="lg-dot" style="color:#FFE81F;background:#FFE81F"></span>反乱同盟 / レジスタンス</label>
+    <label class="lg-row"><input type="checkbox" data-faction="neutral" checked><span class="lg-dot" style="color:#9D7BFF;background:#9D7BFF"></span>その他 / 中立</label>
+    <div style="height:8px"></div>
+    <label class="lg-row"><input type="checkbox" data-rel="family" checked><span class="lg-line" style="background:#FFE81F"></span>家族</label>
+    <label class="lg-row"><input type="checkbox" data-rel="master" checked><span class="lg-line" style="background:#4FA8FF"></span>師弟</label>
+    <label class="lg-row"><input type="checkbox" data-rel="ally" checked><span class="lg-line" style="background:#888"></span>仲間</label>
+    <label class="lg-row"><input type="checkbox" data-rel="enemy" checked><span class="lg-line" style="background:#FF4F4F"></span>敵対</label>
+    <label class="lg-row"><input type="checkbox" data-rel="romance" checked><span class="lg-line" style="background:#FF6FD8"></span>恋愛</label>
+    <div class="lg-subtitle">
+      <span>登場作品</span>
+      <span class="lg-allbtns"><button type="button" id="film-all">全</button><button type="button" id="film-none">解</button></span>
+    </div>
+    <div id="legend-films"><!-- 作品チェックは ui.js が動的生成 --></div>
+  </div>
+</div>
+
+<div id="charlist">
+  <div class="cl-head">CHARACTERS <span id="cl-count"></span></div>
+  <div id="cl-items"></div>
+</div>
+
+<div id="music-credit">♪ &quot;Space Adventures Orchestra Music (Star Wars style)&quot; by humanoide9000 — freesound.org/s/676266/ — CC BY 4.0</div>
+
+<div id="info">
+  <img id="info-img" class="info-img" alt="">
+  <div id="info-credit" class="info-credit"></div>
+  <h2 id="info-name"></h2>
+  <div class="faction" id="info-faction"></div>
+  <div class="desc" id="info-desc"></div>
+  <div class="films-label">登場作品</div>
+  <div class="films" id="info-films"></div>
+</div>
+
+<!-- 画像ドロップのオーバーレイ -->
+<div id="dropzone">画像をドロップして人物に貼り付け</div>
+
+<!-- 画像割り当てパネル -->
+<div id="assign">
+  <div class="as-title">この画像をどの人物に貼りますか？</div>
+  <img id="as-preview" alt="">
+  <input id="as-url" type="text" placeholder="または画像URLを貼り付け（http…）" autocomplete="off">
+  <input id="as-credit" type="text" placeholder="クレジット（CC画像は必須・例: Photo by X / CC BY-SA, Wikimedia）" autocomplete="off">
+  <input id="as-select" list="as-datalist" placeholder="人物を検索して選択…" autocomplete="off">
+  <datalist id="as-datalist"></datalist>
+  <div class="as-btns">
+    <button id="as-ok">貼り付け</button>
+    <button id="as-cancel">キャンセル</button>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js"
+  }
+}
+</script>
+<script type="module" src="js/main.js"></script>
+
+<!-- BGM 再生（音源 theme.mp3 はユーザーが用意） -->
+<script>
+  (function () {
+    var btn = document.getElementById('bgm-toggle');
+    var au = document.getElementById('bgm');
+    au.volume = 0.35;
+    var on = true; // 初期 ON
+
+    function render() {
+      btn.textContent = on ? '♪ BGM ON' : '♪ BGM OFF';
+      btn.classList.toggle('on', on);
+    }
+    // ON かつ「表示中のタブ」かつ「停止中」のときだけ再生（重複・裏タブ再生を防止）
+    function tryPlay() {
+      if (on && !document.hidden && au.paused) au.play().catch(function () { /* 自動再生ブロック時は最初の操作で */ });
+    }
+
+    btn.addEventListener('click', function () {
+      on = !on;
+      if (on) tryPlay(); else au.pause();
+      render();
+    });
+
+    // タブが裏に回ったら止め、戻ってきたら（ONなら）再開 → 再生は常に表示中タブのみ
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) au.pause(); else tryPlay();
+    });
+
+    render();
+    tryPlay();
+    // 自動再生がブロックされた場合、最初のユーザー操作で開始
+    function kick() {
+      tryPlay();
+      removeEventListener('pointerdown', kick); removeEventListener('keydown', kick);
+    }
+    addEventListener('pointerdown', kick);
+    addEventListener('keydown', kick);
+  })();
+</script>
+
+<!-- 全画面表示トグル -->
+<script>
+  (function () {
+    var btn = document.getElementById('fs-toggle');
+    btn.addEventListener('click', function () {
+      if (!document.fullscreenElement) {
+        (document.documentElement.requestFullscreen || function () {}).call(document.documentElement);
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    });
+    document.addEventListener('fullscreenchange', function () {
+      btn.textContent = document.fullscreenElement ? '⛶ 解除' : '⛶ 全画面';
+      btn.classList.toggle('on', !!document.fullscreenElement);
+    });
+  })();
+</script>
+
+<!-- 凡例の折りたたみ -->
+<script>
+  (function () {
+    var btn = document.getElementById('legend-toggle');
+    var legend = document.getElementById('legend');
+    btn.addEventListener('click', function () {
+      var collapsed = legend.classList.toggle('collapsed');
+      btn.setAttribute('aria-expanded', String(!collapsed));
+    });
+  })();
+</script>
+</body>
+</html>

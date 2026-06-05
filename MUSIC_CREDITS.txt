@@ -1,0 +1,22 @@
+BGM クレジット（CC BY 4.0 — 表示義務あり）
+==========================================
+
+theme.wav:
+  曲名 : Space Adventures Orchestra Music (Star Wars style)
+  作者 : humanoide9000
+  入手 : https://freesound.org/s/676266/
+  ライセンス : Creative Commons Attribution 4.0 (CC BY 4.0)
+              https://creativecommons.org/licenses/by/4.0/
+
+必須の表記（公開・共有時はこの一文を必ず表示すること）:
+  "Space Adventures Orchestra Music (Star Wars style)" by humanoide9000
+  https://freesound.org/s/676266/
+  Licensed under Creative Commons Attribution 4.0 (CC BY 4.0)
+  https://creativecommons.org/licenses/by/4.0/
+
+メモ:
+- 画面左下にも上記クレジットを常時表示しています（#music-credit）。
+- 別の曲に差し替えたい場合は theme.wav（または theme.mp3）を置き換え、
+  index.html の src と #music-credit、本ファイルの表記も更新してください。
+- WAV のため約8.7MB。Render等で公開する場合、軽量化したいなら MP3 へ変換推奨
+  （ffmpeg 例: ffmpeg -i theme.wav -b:a 192k theme.mp3 → src を theme.mp3 に）。
