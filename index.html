@@ -115,37 +115,40 @@
     var btn = document.getElementById('bgm-toggle');
     var au = document.getElementById('bgm');
     au.volume = 0.35;
-    var on = true; // 初期 ON
+    var wantOn = true; // 鳴らしたい意思（初期ON）。実際の再生は最初の操作後。
 
+    // 表示は「実際に再生中か」で決める（見た目と実態を一致させる）
     function render() {
-      btn.textContent = on ? '♪ BGM ON' : '♪ BGM OFF';
-      btn.classList.toggle('on', on);
+      btn.textContent = !au.paused ? '♪ BGM ON' : '♪ BGM OFF';
+      btn.classList.toggle('on', !au.paused);
     }
-    // ON かつ「表示中のタブ」かつ「停止中」のときだけ再生（重複・裏タブ再生を防止）
-    function tryPlay() {
-      if (on && !document.hidden && au.paused) au.play().catch(function () { /* 自動再生ブロック時は最初の操作で */ });
-    }
+    au.addEventListener('play', render);
+    au.addEventListener('pause', render);
 
+    // ボタン：停止中なら再生開始、再生中なら停止（クリック自体がユーザー操作なので確実に鳴る）
     btn.addEventListener('click', function () {
-      on = !on;
-      if (on) tryPlay(); else au.pause();
-      render();
+      if (au.paused) { wantOn = true; au.play().catch(function () {}); }
+      else { wantOn = false; au.pause(); }
     });
 
-    // タブが裏に回ったら止め、戻ってきたら（ONなら）再開 → 再生は常に表示中タブのみ
+    // タブが裏に回ったら停止、戻ったら（ONなら）再開 → 再生は表示中タブのみ
     document.addEventListener('visibilitychange', function () {
-      if (document.hidden) au.pause(); else tryPlay();
+      if (document.hidden) au.pause();
+      else if (wantOn && au.paused) au.play().catch(function () {});
     });
 
-    render();
-    tryPlay();
-    // 自動再生がブロックされた場合、最初のユーザー操作で開始
-    function kick() {
-      tryPlay();
-      removeEventListener('pointerdown', kick); removeEventListener('keydown', kick);
+    // 最初の操作（ボタン以外）で自動開始。自動再生がブロックされても確実に鳴らす。
+    function kick(e) {
+      if (e && e.target && e.target.closest && e.target.closest('#bgm-toggle')) return;
+      if (wantOn && au.paused) au.play().catch(function () {});
+      document.removeEventListener('pointerdown', kick, true);
+      document.removeEventListener('keydown', kick, true);
     }
-    addEventListener('pointerdown', kick);
-    addEventListener('keydown', kick);
+    document.addEventListener('pointerdown', kick, true);
+    document.addEventListener('keydown', kick, true);
+
+    au.play().catch(function () {}); // 一応試す（多くは失敗→最初の操作で鳴る）
+    render();
   })();
 </script>
 
