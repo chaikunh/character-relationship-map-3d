@@ -367,3 +367,39 @@ canvas { display: block; }
 #as-ok { background: #FFE81F; color: #111; }
 #as-cancel { background: #2a2c36; color: #ccc; }
 .as-btns button:hover { filter: brightness(1.15); }
+
+/* キャラ一覧トグル（PCでは非表示。スマホで表示） */
+#list-toggle { display: none; }
+
+/* ===== スマホ・狭い画面（〜760px）===== */
+@media (max-width: 760px) {
+  /* タイトルと検索・ボタンをコンパクトに */
+  #title h1 { font-size: 18px; letter-spacing: 3px; }
+  #title p { font-size: 9px; letter-spacing: 2px; }
+  #search { top: 64px; width: 46vw; max-width: 210px; }
+  #bgm-toggle { top: 104px; }
+  #fs-toggle { top: 142px; }
+
+  /* 一覧トグルボタン（右上） */
+  #list-toggle {
+    display: block;
+    position: fixed; top: 10px; right: 10px; z-index: 15;
+    font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 1px;
+    color: #FFE81F; background: rgba(10,12,18,0.72);
+    border: 1px solid rgba(255,232,31,0.3); border-radius: 999px;
+    padding: 8px 12px; cursor: pointer; backdrop-filter: blur(8px);
+  }
+
+  /* 凡例は右上・幅制限。展開時は画面内でスクロール */
+  #legend { top: 54px; right: 10px; left: auto; max-width: 80vw; font-size: 11px; }
+  #legend .lg-body { max-height: 62vh; overflow-y: auto; }
+
+  /* キャラ一覧はドロワー化（既定で画面外。トグルでスライドイン） */
+  #charlist {
+    width: min(82vw, 300px);
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    z-index: 14;
+  }
+  body.show-list #charlist { transform: none; }
+}
