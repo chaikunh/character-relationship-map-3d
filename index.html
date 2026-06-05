@@ -4,7 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>STAR WARS — 人物相関 3D</title>
-<link rel="stylesheet" href="css/style.css?v=24">
+<link rel="stylesheet" href="css/style.css?v=30">
+<script>
+  // 起動エラーを画面に表示（LOADING のまま固まる原因を可視化）
+  window.addEventListener('error', function (e) {
+    var el = document.getElementById('loading');
+    if (!el) return;
+    el.style.color = '#ff6b6b';
+    el.style.fontSize = '13px';
+    el.style.whiteSpace = 'pre-wrap';
+    el.style.textAlign = 'center';
+    el.style.padding = '0 24px';
+    el.textContent = 'ERROR: ' + (e.message || e.type) +
+      (e.filename ? '\n(' + e.filename.split('/').pop() + ':' + (e.lineno || '?') + ')' : '');
+  });
+</script>
 </head>
 <body>
 <div id="loading">LOADING…</div>
@@ -56,6 +70,8 @@
 </div>
 
 <div id="music-credit">♪ &quot;Space Adventures Orchestra Music (Star Wars style)&quot; by humanoide9000 — freesound.org/s/676266/ — CC BY 4.0</div>
+
+<div id="disclaimer">非公式ファン制作です。Lucasfilm Ltd. ／ The Walt Disney Company とは関係ありません。作品名・キャラクター名等の商標・著作権は各権利者に帰属します。</div>
 
 <div id="info">
   <img id="info-img" class="info-img" alt="">

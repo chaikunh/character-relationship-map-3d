@@ -216,6 +216,15 @@ canvas { display: block; }
   color: rgba(255,255,255,0.28);
   pointer-events: none; user-select: none;
 }
+#disclaimer {
+  position: fixed;
+  left: 8px; bottom: 22px;
+  z-index: 10;
+  max-width: 300px; text-align: left;
+  font-size: 7.5px; line-height: 1.35;
+  color: rgba(255,255,255,0.34);
+  pointer-events: none; user-select: none;
+}
 
 /* 左下のフローティングボタン（BGM・画像URL・書き出し・消去） */
 #bgm-toggle, #img-url-btn, #img-export-btn, #img-clear-btn {
@@ -241,10 +250,10 @@ canvas { display: block; }
 #bgm-toggle:hover, #img-url-btn:hover, #img-export-btn:hover, #img-clear-btn:hover { background: rgba(255,232,31,0.12); }
 #bgm-toggle.on { box-shadow: 0 0 14px rgba(255,232,31,0.5); }
 
-/* 全画面ボタン（左下） */
+/* 全画面ボタン（BGMボタンの下） */
 #fs-toggle {
   position: fixed;
-  left: 28px; bottom: 28px;
+  left: 28px; top: 202px;
   z-index: 12;
   font-family: 'Orbitron', sans-serif;
   font-size: 11px; letter-spacing: 1px;
