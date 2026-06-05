@@ -401,12 +401,15 @@ canvas { display: block; }
   /* 一覧トグルボタン（右上） */
   #list-toggle {
     display: block;
-    position: fixed; top: 10px; right: 10px; z-index: 15;
+    position: fixed; right: 12px; bottom: 12px; top: auto; z-index: 16;
     font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 1px;
     color: #FFE81F; background: rgba(10,12,18,0.72);
     border: 1px solid rgba(255,232,31,0.3); border-radius: 999px;
     padding: 8px 12px; cursor: pointer; backdrop-filter: blur(8px);
+    transition: bottom 0.28s ease;
   }
+  /* 一覧を開いたら、ボタンもリストの上端へ一緒に移動 */
+  body:not(.list-collapsed) #list-toggle { bottom: calc(44vh + 8px); }
 
   /* 凡例：折りたたみ時は右上の小チップ。展開時だけ全幅の読みやすいパネルに。 */
   #legend {
