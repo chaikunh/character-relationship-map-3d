@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>STAR WARS — 人物相関 3D</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0c12">
@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="RelMap 3D">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="css/style.css?v=37">
+<link rel="stylesheet" href="css/style.css?v=38">
 <script>
   // 起動エラーを画面に表示（LOADING のまま固まる原因を可視化）
   window.addEventListener('error', function (e) {
@@ -24,6 +24,10 @@
     el.style.padding = '0 24px';
     el.textContent = 'ERROR: ' + (e.message || e.type) +
       (e.filename ? '\n(' + e.filename.split('/').pop() + ':' + (e.lineno || '?') + ')' : '');
+  });
+  // iOS Safari のページ全体ピンチズームを無効化（3Dの操作だけにする）
+  ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (t) {
+    document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false });
   });
 </script>
 </head>
