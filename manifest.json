@@ -1,0 +1,16 @@
+{
+  "name": "3D Character Relationship Map",
+  "short_name": "RelMap 3D",
+  "description": "ブラウザで動く3D人物相関ビューア（非公式ファン制作）",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#000008",
+  "theme_color": "#0a0c12",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
