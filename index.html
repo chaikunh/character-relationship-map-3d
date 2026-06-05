@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>STAR WARS — 人物相関 3D</title>
-<link rel="stylesheet" href="css/style.css?v=31">
+<link rel="stylesheet" href="css/style.css?v=32">
 <script>
   // 起動エラーを画面に表示（LOADING のまま固まる原因を可視化）
   window.addEventListener('error', function (e) {
@@ -188,10 +188,15 @@
     });
   })();
 
-  // キャラ一覧ドロワーの開閉（スマホ）
+  // キャラ一覧（スマホ）：下から出るパネル。初期は隠してグラフを広く。
   (function () {
     var b = document.getElementById('list-toggle');
-    if (b) b.addEventListener('click', function () { document.body.classList.toggle('show-list'); });
+    if (!b) return;
+    if (window.matchMedia('(max-width: 760px)').matches) document.body.classList.add('list-collapsed');
+    b.addEventListener('click', function () {
+      var hidden = document.body.classList.toggle('list-collapsed');
+      b.textContent = hidden ? '☰ 一覧' : '✕ 閉じる';
+    });
   })();
 </script>
 </body>
