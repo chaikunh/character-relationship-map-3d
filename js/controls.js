@@ -44,8 +44,12 @@ export function setupControls(renderer, camera) {
   }, { passive: false });
   dom.addEventListener('contextmenu', e => e.preventDefault());
 
-  // タッチ操作
-  let lastTouch = null, lastPinch = 0;
+  // タッチ操作：1本指＝回転、2本指＝ピンチでズーム＋ドラッグで平行移動
+  let lastTouch = null, lastPinch = 0, lastMid = null;
+  const midpoint = t => ({
+    x: (t[0].clientX + t[1].clientX) / 2,
+    y: (t[0].clientY + t[1].clientY) / 2,
+  });
   dom.addEventListener('touchstart', e => {
     if (e.touches.length === 1) {
       lastTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -53,6 +57,7 @@ export function setupControls(renderer, camera) {
       const dx = e.touches[0].clientX - e.touches[1].clientX;
       const dy = e.touches[0].clientY - e.touches[1].clientY;
       lastPinch = Math.hypot(dx, dy);
+      lastMid = midpoint(e.touches);
     }
   }, { passive: false });
   dom.addEventListener('touchmove', e => {
@@ -66,10 +71,20 @@ export function setupControls(renderer, camera) {
       const dx = e.touches[0].clientX - e.touches[1].clientX;
       const dy = e.touches[0].clientY - e.touches[1].clientY;
       const p = Math.hypot(dx, dy);
-      if (lastPinch) cam.targetDist *= lastPinch / p;
+      if (lastPinch) cam.targetDist *= lastPinch / p; // ピンチ＝ズーム
       cam.targetDist = Math.max(80, Math.min(1200, cam.targetDist));
       lastPinch = p;
+      // 2本指の中点の移動＝平行移動
+      const mid = midpoint(e.touches);
+      if (lastMid) {
+        const mx = mid.x - lastMid.x, my = mid.y - lastMid.y;
+        const right = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 0);
+        const up = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 1);
+        cam.targetPan.add(right.multiplyScalar(-mx * cam.dist * 0.0012));
+        cam.targetPan.add(up.multiplyScalar(my * cam.dist * 0.0012));
+      }
+      lastMid = mid;
     }
   }, { passive: false });
-  dom.addEventListener('touchend', () => { lastTouch = null; lastPinch = 0; });
+  dom.addEventListener('touchend', () => { lastTouch = null; lastPinch = 0; lastMid = null; });
 }
