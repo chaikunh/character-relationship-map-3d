@@ -390,9 +390,14 @@ canvas { display: block; }
     padding: 8px 12px; cursor: pointer; backdrop-filter: blur(8px);
   }
 
-  /* 凡例は右上・幅制限。展開時は画面内でスクロール */
-  #legend { top: 54px; right: 10px; left: auto; max-width: 80vw; font-size: 11px; }
-  #legend .lg-body { max-height: 62vh; overflow-y: auto; }
+  /* 凡例：折りたたみ時は右上の小チップ。展開時だけ全幅の読みやすいパネルに。 */
+  #legend {
+    top: 54px; right: 8px; left: auto; width: auto; max-width: 78vw;
+    font-size: 11px; z-index: 13;
+    background: rgba(8,10,16,0.94);
+  }
+  #legend:not(.collapsed) { left: 8px; right: 8px; max-width: none; } /* 展開＝全幅 */
+  #legend .lg-body { max-height: 66vh; overflow-y: auto; }
 
   /* キャラ一覧は画面下のパネルに（下からスライド）。グラフは上に広く。 */
   #charlist {
