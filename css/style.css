@@ -397,6 +397,8 @@ canvas { display: block; }
   #title p { font-size: 9px; letter-spacing: 2px; }
   /* 左カラムはコンパクトに（検索→FACTION→ボタンが縦に並ぶ） */
   #controls { top: 78px; left: 8px; width: 70vw; max-width: 300px; gap: 8px; }
+  /* スマホは PWA（ホーム追加）で全画面にできるため、全画面ボタンは非表示 */
+  #controls > #fs-toggle { display: none; }
 
   /* 一覧トグルボタン（右上） */
   #list-toggle {
